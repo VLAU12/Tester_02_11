@@ -1,0 +1,116 @@
+<Window x:Class="Tester2_01_GUI.TestRunnerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Прохождение теста - Tester2_01" 
+        WindowState="Maximized"
+        WindowStartupLocation="CenterOwner"
+        Background="White">
+    
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Grid.Row="0" Header="Информация о тесте" FontWeight="Bold" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0">
+                    <TextBlock x:Name="TestTitleTextBlock" FontSize="16" FontWeight="Bold"/>
+                    <TextBlock x:Name="TestAuthorTextBlock" FontSize="12" Foreground="Gray"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Margin="20,0">
+                    <TextBlock Text="Вопрос:" FontSize="12"/>
+                    <TextBlock x:Name="QuestionCounterTextBlock" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="2" Margin="20,0">
+                    <TextBlock Text="Баллы:" FontSize="12"/>
+                    <TextBlock x:Name="PointsTextBlock" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="3">
+                    <TextBlock Text="Время:" FontSize="12"/>
+                    <TextBlock x:Name="TimerTextBlock" 
+                              FontSize="16" 
+                              FontWeight="Bold" 
+                              HorizontalAlignment="Center"
+                              Foreground="Green"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Header="Вопрос" FontWeight="Bold" Margin="0,0,0,10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock x:Name="QuestionTextTextBlock" 
+                              FontSize="14" 
+                              TextWrapping="Wrap" 
+                              Margin="10"
+                              Text="Загрузка вопроса..."/>
+                    
+                    <ContentControl x:Name="QuestionContentControl" Margin="10"/>
+                </StackPanel>
+            </ScrollViewer>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2" Header="Навигация" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="PrevQuestionButton"
+                        Content="⬅️ Предыдущий" 
+                        Width="120" 
+                        Height="35"
+                        Background="#1E90FF" 
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Margin="5"/>
+                
+                <Button x:Name="NextQuestionButton"
+                        Content="Следующий ➡️" 
+                        Width="120" 
+                        Height="35"
+                        Background="#1E90FF" 
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Margin="5"/>
+                
+                <Button x:Name="FinishTestButton"
+                        Content="🏁 Завершить тест" 
+                        Width="150" 
+                        Height="35"
+                        Background="#32CD32" 
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Margin="5"/>
+            </StackPanel>
+        </GroupBox>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <ProgressBar x:Name="ProgressBar" 
+                        Grid.Column="0" 
+                        Height="20" 
+                        Margin="0,0,10,0"
+                        Minimum="0" 
+                        Maximum="100"/>
+            
+            <TextBlock x:Name="ProgressTextBlock" 
+                      Grid.Column="1" 
+                      VerticalAlignment="Center"
+                      FontWeight="Bold"/>
+        </Grid>
+    </Grid>
+</Window>

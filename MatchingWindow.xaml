@@ -1,0 +1,166 @@
+<Window x:Class="Tester2_01_GUI.MatchingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Редактор вопроса на сопоставление" 
+        Height="700" 
+        Width="800"
+        WindowStartupLocation="CenterOwner">
+    
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" 
+                  Text="Вопрос на сопоставление" 
+                  FontSize="18" 
+                  FontWeight="Bold"
+                  Margin="0,0,0,10"/>
+
+        <GroupBox Grid.Row="1" Header="Текст задания:" Margin="0,0,0,10">
+            <TextBox x:Name="QuestionTextTextBox" 
+                    Height="60" 
+                    TextWrapping="Wrap" 
+                    VerticalScrollBarVisibility="Auto"
+                    Text="Соотнесите элементы из левого и правого столбцов..."
+                    FontSize="14"/>
+        </GroupBox>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="Баллы за вопрос:" VerticalAlignment="Center"/>
+            <TextBox x:Name="PointsTextBox" 
+                    Width="50" 
+                    Margin="10,0,0,0" 
+                    Text="2"
+                    VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <GroupBox Grid.Row="3" Header="Пары для сопоставления:" Margin="0,0,0,10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <GroupBox Grid.Row="0" Grid.Column="0" Header="Левый столбец (понятия)">
+                    <ListView x:Name="LeftItemsListView" Height="200">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Ключ" Width="50">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Key}" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Понятие" Width="200">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Value}" Width="190" Margin="2"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </GroupBox>
+
+                <TextBlock Grid.Row="0" Grid.Column="1" 
+                          Text="→" 
+                          FontSize="24" 
+                          FontWeight="Bold"
+                          VerticalAlignment="Center"
+                          Margin="10,0"/>
+
+                <GroupBox Grid.Row="0" Grid.Column="2" Header="Правый столбец (определения)">
+                    <ListView x:Name="RightItemsListView" Height="200">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Ключ" Width="50">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Key}" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Определение" Width="200">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Value}" Width="190" Margin="2"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </GroupBox>
+
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="➕ Добавить" Width="80" Click="AddLeftItemButton_Click"/>
+                    <Button Content="🗑️ Удалить" Width="80" Margin="5,0" Click="RemoveLeftItemButton_Click"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="➕ Добавить" Width="80" Click="AddRightItemButton_Click"/>
+                    <Button Content="🗑️ Удалить" Width="80" Margin="5,0" Click="RemoveRightItemButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="4" Header="Управление соответствиями" Margin="0,0,0,15">
+            <StackPanel>
+                <TextBlock x:Name="MatchesInfoTextBlock" 
+                          FontSize="12" 
+                          TextWrapping="Wrap"
+                          Margin="0,0,0,10"
+                          Text="Соответствия не установлены"/>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="EditMatchesButton"
+                            Content="🔗 Установить соответствия" 
+                            Width="160" 
+                            Height="30"
+                            Click="EditMatchesButton_Click"
+                            Margin="5"/>
+                    
+                    <Button Content="🗑️ Удалить выбранное" 
+                            Width="140" 
+                            Height="30"
+                            Background="Orange" 
+                            Foreground="White"
+                            Click="RemoveSelectedMatchButton_Click"
+                            Margin="5"/>
+                    
+                    <Button Content="💾 Сохранить вопрос" 
+                            Width="140" 
+                            Height="30"
+                            Background="#32CD32" 
+                            Foreground="White"
+                            Click="SaveButton_Click"
+                            Margin="5"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            
+            
+            <Button Content="❌ Отмена" 
+                    Width="100" 
+                    Height="35"
+                    Background="#DC143C" 
+                    Foreground="White"
+                    FontWeight="Bold"
+                    Click="CancelButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

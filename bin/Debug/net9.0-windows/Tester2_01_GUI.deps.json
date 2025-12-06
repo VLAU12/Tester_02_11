@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "Tester2_01_GUI/1.0.0": {
+        "runtime": {
+          "Tester2_01_GUI.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Tester2_01_GUI/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

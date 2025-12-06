@@ -1,0 +1,114 @@
+<Window x:Class="Tester2_01_GUI.MatchingPairsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Редактор правильных соответствий" 
+        Height="600" 
+        Width="820"
+        WindowStartupLocation="CenterOwner">
+    
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" 
+                  Text="Установите правильные соответствия" 
+                  FontSize="18" 
+                  FontWeight="Bold"
+                  Margin="0,0,0,10"/>
+
+        <GroupBox Grid.Row="1" Header="Сопоставление элементов" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="5">
+                    <TextBlock Text="Левый столбец (понятия):" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ListView x:Name="LeftItemsListView" Height="300">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Ключ" Width="50" DisplayMemberBinding="{Binding Key}"/>
+                                <GridViewColumn Header="Понятие" Width="200" DisplayMemberBinding="{Binding Value}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </StackPanel>
+
+                <TextBlock Grid.Column="1" 
+                          Text="→" 
+                          FontSize="24" 
+                          FontWeight="Bold"
+                          VerticalAlignment="Center"
+                          Margin="10,0"/>
+
+                <StackPanel Grid.Column="2" Margin="5">
+                    <TextBlock Text="Правый столбец (определения):" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ListView x:Name="RightItemsListView" Height="300">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Ключ" Width="50" DisplayMemberBinding="{Binding Key}"/>
+                                <GridViewColumn Header="Определение" Width="200" DisplayMemberBinding="{Binding Value}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2" Header="Установленные соответствия" Margin="0,0,0,10">
+            <StackPanel>
+                <TextBlock x:Name="CurrentMatchesTextBlock" 
+                          FontSize="12" 
+                          TextWrapping="Wrap"
+                          Margin="5"/>
+                
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <Button Content="➕ Добавить соответствие" 
+                            Width="150" 
+                            Height="30"
+                            Click="AddMatchButton_Click"/>
+                    
+                    <Button Content="🗑️ Удалить выбранное" 
+                            Width="120" 
+                            Height="30"
+                            Margin="10,0,0,0"
+                            Background="Orange"
+                            Foreground="White"
+                            Click="RemoveSelectedMatchButton_Click"/>
+                    
+                    <Button Content="🗑️ Очистить все" 
+                            Width="100" 
+                            Height="30"
+                            Margin="10,0,0,0"
+                            Click="ClearMatchesButton_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="SaveButton"
+                    Content="💾 Сохранить" 
+                    Width="100" 
+                    Height="35"
+                    Background="#32CD32" 
+                    Foreground="White"
+                    FontWeight="Bold"
+                    Click="SaveButton_Click"
+                    Margin="0,0,10,0"/>
+            
+            <Button x:Name="CancelButton"
+                    Content="❌ Отмена" 
+                    Width="100" 
+                    Height="35"
+                    Background="#DC143C" 
+                    Foreground="White"
+                    FontWeight="Bold"
+                    Click="CancelButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

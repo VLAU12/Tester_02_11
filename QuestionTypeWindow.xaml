@@ -5,7 +5,8 @@
         Height="700" 
         Width="860"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Background="Black">
     
     <Window.Resources>
         <Style x:Key="QuestionTypeButton" TargetType="Button">
@@ -14,46 +15,93 @@
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Margin" Value="10,5"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Background" Value="#4A90E2"/>
+            <Setter Property="Background" Value="#464646"/>
             <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
         </Style>
     </Window.Resources>
 
     <Grid Margin="15">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#000000" Offset="0"/>
+                <GradientStop Color="#121212" Offset="0.3"/>
+                <GradientStop Color="#1a1a1a" Offset="0.5"/>
+                <GradientStop Color="#121212" Offset="0.7"/>
+                <GradientStop Color="#000000" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        
         <StackPanel>
-            <TextBlock Text="Выберите тип вопроса:" 
-                      FontSize="20" 
+            <TextBlock Text="🎯 Выберите тип вопроса:" 
+                      FontSize="22" 
                       FontWeight="Bold"
                       HorizontalAlignment="Center"
-                      Margin="0,0,0,20"/>
+                      Foreground="#a3a3a3"
+                      Margin="0,0,0,30">
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="#fa8100" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+                </TextBlock.Effect>
+            </TextBlock>
+            
+            <Button Content="🎬 Медиаконтент" 
+                    Style="{StaticResource QuestionTypeButton}"
+                    Click="MediaButton_Click"
+                    ToolTip="Добавить медиафайл (видео, фото, аудио)">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
             
             <Button Content="📝 Вопрос с выбором ответа" 
                     Style="{StaticResource QuestionTypeButton}"
                     Click="MultipleChoiceButton_Click"
-                    ToolTip="Создать вопрос с несколькими вариантами ответов"/>
+                    ToolTip="Создать вопрос с несколькими вариантами ответов">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
             
             <Button Content="🔗 Вопрос на сопоставление" 
                     Style="{StaticResource QuestionTypeButton}"
                     Click="MatchingButton_Click"
-                    ToolTip="Создать вопрос на сопоставление элементов"/>
+                    ToolTip="Создать вопрос на сопоставление элементов">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
             
             <Button Content="⌨️ Вопрос с вводом текста" 
                     Style="{StaticResource QuestionTypeButton}"
                     Click="TextInputButton_Click"
-                    ToolTip="Создать вопрос с текстовым ответом"/>
+                    ToolTip="Создать вопрос с текстовым ответом">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
             
             <Button Content="☑️ Множественный выбор" 
                     Style="{StaticResource QuestionTypeButton}"
                     Click="MultipleChoiceMultiButton_Click"
-                    ToolTip="Создать вопрос с несколькими правильными ответами"/>
-                    
+                    ToolTip="Создать вопрос с несколькими правильными ответами">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
+                                  
             <Button Content="❌ Отмена" 
-                    Height="40" 
+                    Height="45" 
                     FontSize="14"
-                    Margin="10,20,10,0"
-                    Background="#696969" 
+                    Margin="10,30,10,0"
+                    Background="#464646" 
                     Foreground="White"
-                    Click="CancelButton_Click"/>
+                    FontWeight="SemiBold"
+                    Click="CancelButton_Click"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

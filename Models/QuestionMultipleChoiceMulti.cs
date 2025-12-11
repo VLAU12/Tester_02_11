@@ -25,7 +25,6 @@ namespace Tester2_01_GUI.Models
         
         public bool IsAnswerCorrect(List<int> selectedIndices)
         {
-            // Все правильные ответы должны быть выбраны
             if (selectedIndices.Count != CorrectOptionIndices.Count)
                 return false;
                 

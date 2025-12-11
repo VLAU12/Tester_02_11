@@ -52,7 +52,6 @@ namespace Tester2_01_GUI
             EditQuestionButton.Click += EditQuestionButton_Click;
             DeleteQuestionButton.Click += DeleteQuestionButton_Click;
             SaveTestButton.Click += SaveTestButton_Click;
-            SaveAsButton.Click += SaveAsButton_Click;
             LoadTestButton.Click += LoadTestButton_Click;
             ResetTestButton.Click += ResetTestButton_Click;
             MoveUpButton.Click += MoveUpButton_Click;
@@ -111,17 +110,17 @@ namespace Tester2_01_GUI
             TeacherTextBox.Text = test.Author;
             GroupTextBox.Text = test.Description.Replace("Тест для группы: ", "");
             
-            // Обновляем настройки времени
+            // Обновляем настройки времени - ИСПРАВЛЯЕМ
             switch (test.TimeLimitType)
             {
-                case TimeLimitType.None:
+                case TestTimeLimitType.None:  // Изменено
                     NoTimeLimitRadio.IsChecked = true;
                     break;
-                case TimeLimitType.PerQuestion:
+                case TestTimeLimitType.PerQuestion:  // Изменено
                     PerQuestionTimeRadio.IsChecked = true;
                     PerQuestionTimeTextBox.Text = test.TimeLimitPerQuestion.ToString();
                     break;
-                case TimeLimitType.WholeTest:
+                case TestTimeLimitType.WholeTest:  // Изменено
                     WholeTestTimeRadio.IsChecked = true;
                     WholeTestTimeTextBox.Text = test.TimeLimitForWholeTest.ToString();
                     break;
@@ -244,6 +243,9 @@ namespace Tester2_01_GUI
             {
                 switch (typeWindow.SelectedQuestionType)
                 {
+                    case "Media":
+                        CreateMediaQuestion();
+                        break;
                     case "MultipleChoice":
                         CreateMultipleChoiceQuestion();
                         break;
@@ -261,6 +263,31 @@ namespace Tester2_01_GUI
             }
         }
 
+        private void CreateMediaQuestion()
+        {
+            var mediaWindow = new MediaWindow();
+            mediaWindow.Owner = this;
+            
+            if (mediaWindow.ShowDialog() == true && mediaWindow.ResultQuestion != null)
+            {
+                mediaWindow.ResultQuestion.Id = questions.Count + 1;
+                questions.Add(mediaWindow.ResultQuestion);
+                QuestionsListView.Items.Refresh();
+                
+                string mediaType = mediaWindow.ResultQuestion.MediaType switch
+                {
+                    MediaType.Image => "изображение",
+                    MediaType.Video => "видео",
+                    MediaType.Audio => "аудио",
+                    _ => "медиа"
+                };
+                
+                MessageBox.Show($"Медиа-вопрос добавлен!\n\nТип: {mediaType}\nФайл: {mediaWindow.ResultQuestion.MediaFileName}",
+                            "Вопрос добавлен", 
+                            MessageBoxButton.OK, 
+                            MessageBoxImage.Information);
+            }
+        }
         private void CreateMultipleChoiceMultiQuestion()
         {
             var mcWindow = new MultipleChoiceMultiWindow();
@@ -320,6 +347,9 @@ namespace Tester2_01_GUI
                 // Открываем окно редактирования в зависимости от типа вопроса
                 switch (questionToEdit)
                 {
+                    case QuestionMedia mediaQuestion:
+                        isEdited = EditMediaQuestion(mediaQuestion);
+                        break;
                     case QuestionMultipleChoice mcQuestion:
                         isEdited = EditMultipleChoiceQuestion(mcQuestion);
                         break;
@@ -362,6 +392,35 @@ namespace Tester2_01_GUI
             }
         }
 
+        private bool EditMediaQuestion(QuestionMedia question)
+        {
+            var editWindow = new MediaWindow();
+            
+            editWindow.QuestionTextTextBox.Text = question.QuestionText;
+            editWindow.PointsTextBox.Text = question.Points.ToString();
+            editWindow.MediaTypeComboBox.SelectedIndex = (int)question.MediaType;
+            editWindow.MediaPathTextBox.Text = question.MediaPath;
+            editWindow.CaptionTextBox.Text = question.Caption;
+            editWindow.AutoPlayCheckBox.IsChecked = question.AutoPlay;
+            editWindow.LoopCheckBox.IsChecked = question.Loop;
+            
+            editWindow.UpdateMediaPreview();
+            editWindow.Owner = this;
+            
+            if (editWindow.ShowDialog() == true && editWindow.ResultQuestion != null)
+            {
+                question.QuestionText = editWindow.ResultQuestion.QuestionText;
+                question.Points = editWindow.ResultQuestion.Points;
+                question.MediaType = editWindow.ResultQuestion.MediaType;
+                question.MediaPath = editWindow.ResultQuestion.MediaPath;
+                question.Caption = editWindow.ResultQuestion.Caption;
+                question.AutoPlay = editWindow.ResultQuestion.AutoPlay;
+                question.Loop = editWindow.ResultQuestion.Loop;
+                return true;
+            }
+            
+            return false;
+        }
         private bool EditMultipleChoiceQuestion(QuestionMultipleChoice question)
         {
             var editWindow = new MultipleChoiceWindow();
@@ -560,11 +619,11 @@ namespace Tester2_01_GUI
 
             if (NoTimeLimitRadio.IsChecked == true)
             {
-                currentTest.TimeLimitType = TimeLimitType.None;
+                currentTest.TimeLimitType = TestTimeLimitType.None;
             }
             else if (PerQuestionTimeRadio.IsChecked == true)
             {
-                currentTest.TimeLimitType = TimeLimitType.PerQuestion;
+                currentTest.TimeLimitType = TestTimeLimitType.PerQuestion;
                 if (!int.TryParse(PerQuestionTimeTextBox.Text, out int perQuestionTime) || perQuestionTime <= 0)
                 {
                     MessageBox.Show("Введите корректное время на вопрос (положительное число)", 
@@ -577,7 +636,7 @@ namespace Tester2_01_GUI
             }
             else if (WholeTestTimeRadio.IsChecked == true)
             {
-                currentTest.TimeLimitType = TimeLimitType.WholeTest;
+                currentTest.TimeLimitType = TestTimeLimitType.WholeTest;
                 if (!int.TryParse(WholeTestTimeTextBox.Text, out int wholeTestTime) || wholeTestTime <= 0)
                 {
                     MessageBox.Show("Введите корректное время на тест (положительное число)", 
@@ -596,36 +655,65 @@ namespace Tester2_01_GUI
         {
             try
             {
-                // Обновляем тест данными из полей
                 currentTest.Title = TestTitleTextBox.Text.Trim();
-                currentTest.Author = string.IsNullOrWhiteSpace(TeacherTextBox.Text) ? "Неизвестный преподаватель" : TeacherTextBox.Text.Trim();
-                currentTest.Description = $"Тест для группы: {(string.IsNullOrWhiteSpace(GroupTextBox.Text) ? "Не указана" : GroupTextBox.Text.Trim())}";
+                currentTest.Author = string.IsNullOrWhiteSpace(TeacherTextBox.Text) 
+                    ? "Неизвестный преподаватель" 
+                    : TeacherTextBox.Text.Trim();
+                currentTest.Description = $"Тест для группы: {(string.IsNullOrWhiteSpace(GroupTextBox.Text) 
+                    ? "Не указана" 
+                    : GroupTextBox.Text.Trim())}";
                 currentTest.CreatedDate = DateTime.Now;
-
-                // Сохраняем вопросы
+                
+                // Настройки времени
+                if (NoTimeLimitRadio.IsChecked == true)
+                {
+                    currentTest.TimeLimitType = TestTimeLimitType.None;
+                }
+                else if (PerQuestionTimeRadio.IsChecked == true)
+                {
+                    currentTest.TimeLimitType = TestTimeLimitType.PerQuestion;
+                    if (int.TryParse(PerQuestionTimeTextBox.Text, out int perQuestionTime) && perQuestionTime > 0)
+                    {
+                        currentTest.TimeLimitPerQuestion = perQuestionTime;
+                    }
+                }
+                else if (WholeTestTimeRadio.IsChecked == true)
+                {
+                    currentTest.TimeLimitType = TestTimeLimitType.WholeTest;
+                    if (int.TryParse(WholeTestTimeTextBox.Text, out int wholeTestTime) && wholeTestTime > 0)
+                    {
+                        currentTest.TimeLimitForWholeTest = wholeTestTime;
+                    }
+                }
                 currentTest.Questions.Clear();
+                
                 foreach (var question in questions)
                 {
-                    currentTest.Questions.Add(question);
+                    currentTest.Questions.Add(question.Clone());
                 }
-
                 fileService.SaveTest(currentTest, filePath);
                 
                 string timeInfo = GetTimeLimitInfo();
                 
-                MessageBox.Show($"Тест успешно сохранен!\n\nФайл: {filePath}\nНазвание: {currentTest.Title}\nВопросов: {currentTest.Questions.Count}\nАвтор: {currentTest.Author}\nОбщий балл: {currentTest.MaxScore}{timeInfo}",
-                              "Сохранение завершено", 
-                              MessageBoxButton.OK, 
-                              MessageBoxImage.Information);
+                MessageBox.Show($"Тест успешно сохранен!\n\n" +
+                            $"Файл: {filePath}\n" +
+                            $"Название: {currentTest.Title}\n" +
+                            $"Вопросов: {currentTest.Questions.Count}\n" +
+                            $"Автор: {currentTest.Author}\n" +
+                            $"Общий балл: {currentTest.MaxScore}{timeInfo}",
+                            "Сохранение завершено", 
+                            MessageBoxButton.OK, 
+                            MessageBoxImage.Information);
                 
                 LoadedTestInfoTextBlock.Text = $"Сохранен: {currentTest.Title} (вопросов: {questions.Count})";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при сохранении теста: {ex.Message}", 
-                              "Ошибка", 
-                              MessageBoxButton.OK, 
-                              MessageBoxImage.Error);
+                MessageBox.Show($"Ошибка при сохранении теста: {ex.Message}\n\n" +
+                            $"Подробности: {ex.InnerException?.Message}", 
+                            "Ошибка", 
+                            MessageBoxButton.OK, 
+                            MessageBoxImage.Error);
             }
         }
 
@@ -633,8 +721,8 @@ namespace Tester2_01_GUI
         {
             return currentTest.TimeLimitType switch
             {
-                TimeLimitType.PerQuestion => $"\nВремя на вопрос: {currentTest.TimeLimitPerQuestion} сек.",
-                TimeLimitType.WholeTest => $"\nВремя на тест: {TimeSpan.FromSeconds(currentTest.TimeLimitForWholeTest):mm\\:ss}",
+                TestTimeLimitType.PerQuestion => $"\nВремя на вопрос: {currentTest.TimeLimitPerQuestion} сек.",
+                TestTimeLimitType.WholeTest => $"\nВремя на тест: {TimeSpan.FromSeconds(currentTest.TimeLimitForWholeTest):mm\\:ss}",
                 _ => "\nОграничение времени: нет"
             };
         }
@@ -699,13 +787,19 @@ namespace Tester2_01_GUI
             if (questions.Count > 0)
             {
                 var result = MessageBox.Show("Есть несохраненные изменения. Вы уверены, что хотите закрыть конструктор?", 
-                                           "Подтверждение", 
-                                           MessageBoxButton.YesNo, 
-                                           MessageBoxImage.Question);
+                                        "Подтверждение", 
+                                        MessageBoxButton.YesNo, 
+                                        MessageBoxImage.Question);
                 if (result == MessageBoxResult.No)
                 {
                     return;
                 }
+            }
+            
+            // Очищаем временные файлы, если тест был загружен
+            if (currentTest != null && !string.IsNullOrEmpty(currentTest.TempDirectory))
+            {
+                fileService.CleanupTempFiles(currentTest);
             }
             
             this.Close();

@@ -32,15 +32,23 @@ namespace Tester2_01_GUI
             this.Close();
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = false;
-            this.Close();
-        }
         private void MultipleChoiceMultiButton_Click(object sender, RoutedEventArgs e)
         {
             SelectedQuestionType = "MultipleChoiceMulti";
             this.DialogResult = true;
+            this.Close();
+        }
+
+        private void MediaButton_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedQuestionType = "Media";
+            this.DialogResult = true;
+            this.Close();
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
             this.Close();
         }
     }

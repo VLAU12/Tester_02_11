@@ -5,7 +5,7 @@
         Height="700" 
         Width="900"
         WindowStartupLocation="CenterOwner"
-        Background="White">
+        Background="Black">
     
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -13,25 +13,44 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
-        <StackPanel Grid.Row="0" Margin="0,0,0,10">
-            <TextBlock Text="Детальные результаты тестирования" 
-                      FontSize="20" 
+        
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#000000" Offset="0"/>
+                <GradientStop Color="#121212" Offset="0.3"/>
+                <GradientStop Color="#1a1a1a" Offset="0.5"/>
+                <GradientStop Color="#121212" Offset="0.7"/>
+                <GradientStop Color="#000000" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        
+        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+            <TextBlock Text="📊 Детальные результаты тестирования" 
+                      FontSize="22" 
                       FontWeight="Bold"
-                      HorizontalAlignment="Center"/>
+                      Foreground="#a3a3a3"
+                      HorizontalAlignment="Center"
+                      Margin="0,0,0,5">
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="#fa8100" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+                </TextBlock.Effect>
+            </TextBlock>
             
             <TextBlock x:Name="HeaderTextBlock" 
                       FontSize="14"
+                      Foreground="White"
                       HorizontalAlignment="Center"
-                      Margin="0,5"/>
+                      Margin="0,5"
+                      TextAlignment="Center"/>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,0,15">
             <StackPanel>
                 <TextBlock x:Name="ResultsDetailsTextBlock" 
-                          FontSize="12" 
+                          FontSize="13" 
+                          Foreground="White"
                           TextWrapping="Wrap"
-                          Margin="5"/>
+                          Margin="10"/>
             </StackPanel>
         </ScrollViewer>
 
@@ -39,21 +58,33 @@
             <Button x:Name="SaveDetailsButton"
                     Content="💾 Сохранить детали" 
                     Width="150" 
-                    Height="35"
-                    Background="#1E90FF" 
+                    Height="40"
+                    Background="#464646" 
                     Foreground="White"
-                    FontWeight="Bold"
+                    FontSize="14"
+                    FontWeight="SemiBold"
                     Click="SaveDetailsButton_Click"
-                    Margin="0,0,10,0"/>
+                    Margin="0,0,10,0"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
             
             <Button x:Name="CloseButton"
                     Content="✅ Закрыть" 
                     Width="120" 
-                    Height="35"
-                    Background="#32CD32" 
+                    Height="40"
+                    Background="#464646" 
                     Foreground="White"
-                    FontWeight="Bold"
-                    Click="CloseButton_Click"/>
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Click="CloseButton_Click"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

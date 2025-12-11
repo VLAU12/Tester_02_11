@@ -3,9 +3,10 @@ using System.Text.Json.Serialization;
 namespace Tester2_01_GUI.Models
 {
     [JsonDerivedType(typeof(QuestionMultipleChoice), typeDiscriminator: "multiple_choice")]
-    [JsonDerivedType(typeof(QuestionMultipleChoiceMulti), typeDiscriminator: "multiple_choice_multi")] // Добавили
+    [JsonDerivedType(typeof(QuestionMultipleChoiceMulti), typeDiscriminator: "multiple_choice_multi")]
     [JsonDerivedType(typeof(QuestionMatching), typeDiscriminator: "matching")]
     [JsonDerivedType(typeof(QuestionTextInput), typeDiscriminator: "text_input")]
+    [JsonDerivedType(typeof(QuestionMedia), typeDiscriminator: "media")] // Добавили
     public abstract class QuestionBase
     {
         public int Id { get; set; }
@@ -20,9 +21,10 @@ namespace Tester2_01_GUI.Models
                 return Type switch
                 {
                     "QuestionMultipleChoice" => "Выбор ответа",
-                    "QuestionMultipleChoiceMulti" => "Множественный выбор", // Добавили
+                    "QuestionMultipleChoiceMulti" => "Множественный выбор",
                     "QuestionMatching" => "Сопоставление",
                     "QuestionTextInput" => "Ввод текста",
+                    "QuestionMedia" => "Медиаконтент", // Добавили
                     _ => Type
                 };
             }

@@ -1,0 +1,239 @@
+<Window x:Class="Tester2_01_GUI.MediaWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Редактор медиаконтента" 
+        Height="740" 
+        Width="860"
+        WindowStartupLocation="CenterOwner"
+        Background="Black">
+    
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#000000" Offset="0"/>
+                <GradientStop Color="#121212" Offset="0.3"/>
+                <GradientStop Color="#1a1a1a" Offset="0.5"/>
+                <GradientStop Color="#121212" Offset="0.7"/>
+                <GradientStop Color="#000000" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <TextBlock Grid.Row="0" 
+                  Text="🎬 Медиаконтент" 
+                  FontSize="18" 
+                  FontWeight="Bold"
+                  Foreground="#a3a3a3"
+                  Margin="0,0,0,10"
+                  HorizontalAlignment="Center">
+            <TextBlock.Effect>
+                <DropShadowEffect Color="#fa8100" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <GroupBox Grid.Row="1" Header="Описание:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,10">
+            <TextBox x:Name="QuestionTextTextBox" 
+                    Height="60" 
+                    TextWrapping="Wrap" 
+                    VerticalScrollBarVisibility="Auto"
+                    Text="Информационный блок с медиаконтентом..."
+                    FontSize="14"
+                    Background="#2a2a2a"
+                    Foreground="White"/>
+        </GroupBox>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,15">
+            <Label Content="Баллы:" Foreground="White" VerticalAlignment="Center"/>
+            <TextBox x:Name="PointsTextBox" 
+                    Width="50" 
+                    Margin="10,0,0,0" 
+                    Text="0"
+                    Background="#2a2a2a"
+                    Foreground="White"
+                    VerticalAlignment="Center"/>
+            <TextBlock Text="(0 баллов - информационный блок)" 
+                      Margin="10,0,0,0" 
+                      VerticalAlignment="Center"
+                      Foreground="#a3a3a3"
+                      FontStyle="Italic"/>
+        </StackPanel>
+
+        <GroupBox Grid.Row="3" Header="Настройки медиа" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,15">
+            <Grid Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Тип медиа:" Foreground="White" VerticalAlignment="Center"/>
+                <ComboBox x:Name="MediaTypeComboBox" 
+                         Grid.Row="0" Grid.Column="1"
+                         Margin="5" 
+                         SelectedIndex="0"
+                         Background="#2a2a2a"
+
+                         SelectionChanged="MediaTypeComboBox_SelectionChanged">
+                    <ComboBoxItem Content="Изображение" Foreground="Black"/>
+                    <ComboBoxItem Content="Видео" Foreground="Black"/>
+                    <ComboBoxItem Content="Аудио" Foreground="Black"/>
+                </ComboBox>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Медиафайл:" Foreground="White" VerticalAlignment="Center"/>
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                    <TextBox x:Name="MediaPathTextBox" 
+                            Width="300" 
+                            Margin="5" 
+                            VerticalAlignment="Center"
+                            Background="#2a2a2a"
+                            Foreground="White"
+                            IsReadOnly="True"/>
+                    <Button x:Name="BrowseMediaButton"
+                            Content="📁 Выбрать..." 
+                            Width="100" 
+                            Height="30"
+                            Margin="5"
+                            Background="#464646"
+                            Foreground="White"
+                            FontWeight="SemiBold"
+                            Click="BrowseMediaButton_Click"
+                            Cursor="Hand">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="8" ShadowDepth="2" Color="#fa8100"/>
+                        </Button.Effect>
+                    </Button>
+                </StackPanel>
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Подпись:" Foreground="White" VerticalAlignment="Top"/>
+                <TextBox x:Name="CaptionTextBox" 
+                        Grid.Row="2" Grid.Column="1"
+                        Height="40" 
+                        Margin="5" 
+                        TextWrapping="Wrap"
+                        Background="#2a2a2a"
+                        Foreground="White"
+                        VerticalScrollBarVisibility="Auto"/>
+
+                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="5">
+                    <CheckBox x:Name="AutoPlayCheckBox" 
+                             Content="Автовоспроизведение"
+                             VerticalAlignment="Center"
+                             Foreground="White"
+                             Margin="0,0,15,0"/>
+                    <CheckBox x:Name="LoopCheckBox" 
+                             Content="Повторять"
+                             Foreground="White"
+                             VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" 
+                       BorderBrush="#464646" 
+                       BorderThickness="1" 
+                       Margin="5"
+                       Height="200"
+                       Background="#1a1a1a">
+                    <Grid x:Name="MediaPreviewGrid">
+                        <TextBlock x:Name="MediaPreviewText" 
+                                  Text="Предпросмотр медиафайла"
+                                  Foreground="#a3a3a3" 
+                                  HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center"
+                                  FontStyle="Italic"/>
+                        
+                        <!-- Для изображений -->
+                        <Image x:Name="ImagePreview" 
+                              Stretch="Uniform" 
+                              Visibility="Collapsed"/>
+                        
+                        <!-- Для видео -->
+                        <MediaElement x:Name="VideoPreview" 
+                                     Stretch="Uniform" 
+                                     Visibility="Collapsed"
+                                     LoadedBehavior="Manual"/>
+                        
+                        <!-- Для аудио -->
+                        <MediaElement x:Name="AudioPreview" 
+                                     Stretch="Uniform" 
+                                     Visibility="Collapsed"
+                                     LoadedBehavior="Manual"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </GroupBox>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,15">
+            <Button x:Name="PreviewButton"
+                    Content="▶️ Предпросмотр" 
+                    Width="140" 
+                    Height="35"
+                    Background="#464646" 
+                    Foreground="White"
+                    FontWeight="SemiBold"
+                    Click="PreviewButton_Click"
+                    Margin="5"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
+            <Button x:Name="StopPreviewButton"
+                    Content="⏹️ Остановить" 
+                    Width="140" 
+                    Height="35"
+                    Background="#464646" 
+                    Foreground="White"
+                    FontWeight="SemiBold"
+                    Click="StopPreviewButton_Click"
+                    Margin="5"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
+        </StackPanel>
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="💾 Сохранить" 
+                    Width="100" 
+                    Height="40"
+                    Background="#464646" 
+                    Foreground="White"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Click="SaveButton_Click"
+                    Margin="0,0,10,0"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
+            <Button Content="❌ Отмена" 
+                    Width="100" 
+                    Height="40"
+                    Background="#464646" 
+                    Foreground="White"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Click="CancelButton_Click"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

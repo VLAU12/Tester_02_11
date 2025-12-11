@@ -7,6 +7,7 @@ C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\DetailedResultsWindow.baml
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\MainWindow.baml
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\MatchingPairsWindow.baml
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\MatchingWindow.baml
+C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\MediaWindow.baml
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\MultipleChoiceMultiWindow.baml
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\MultipleChoiceWindow.baml
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\QuestionTypeWindow.baml
@@ -19,6 +20,7 @@ C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\DetailedResultsWindow.g.cs
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\MainWindow.g.cs
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\MatchingPairsWindow.g.cs
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\MatchingWindow.g.cs
+C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\MediaWindow.g.cs
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\MultipleChoiceMultiWindow.g.cs
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\MultipleChoiceWindow.g.cs
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\QuestionTypeWindow.g.cs
@@ -34,6 +36,7 @@ C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\Tester2_01_GUI.GeneratedMS
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\Tester2_01_GUI.AssemblyInfoInputs.cache
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\Tester2_01_GUI.AssemblyInfo.cs
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\Tester2_01_GUI.csproj.CoreCompileInputs.cache
+C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\Tester2_01_GUI.sourcelink.json
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\Tester2_01_GUI.dll
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\refint\Tester2_01_GUI.dll
 C:\Users\Mypoc\Tester_2.05.1\obj\Debug\net9.0-windows\Tester2_01_GUI.pdb

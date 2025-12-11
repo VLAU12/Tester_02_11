@@ -5,7 +5,7 @@
         Height="600" 
         Width="700"
         WindowStartupLocation="CenterOwner"
-        Background="White">
+        Background="Black">
     
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -14,32 +14,49 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#000000" Offset="0"/>
+                <GradientStop Color="#121212" Offset="0.3"/>
+                <GradientStop Color="#1a1a1a" Offset="0.5"/>
+                <GradientStop Color="#121212" Offset="0.7"/>
+                <GradientStop Color="#000000" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        
         <TextBlock Grid.Row="0" 
-                  Text="Результаты тестирования" 
+                  Text="📊 Результаты тестирования" 
+                  Foreground="#a3a3a3"
                   FontSize="24" 
                   FontWeight="Bold"
                   HorizontalAlignment="Center"
-                  Margin="0,0,0,20"/>
+                  Margin="0,0,0,20">
+            <TextBlock.Effect>
+                <DropShadowEffect Color="#fa8100" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+            </TextBlock.Effect>
+        </TextBlock>
 
-        <GroupBox Grid.Row="1" Header="Результаты" FontWeight="Bold">
+        <GroupBox Grid.Row="1" Header="Результаты" Foreground="White" FontWeight="Bold">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="10">
                     <TextBlock x:Name="ResultsTextBlock" 
                               FontSize="14" 
                               TextWrapping="Wrap"
+                              Foreground="White"
                               Margin="0,0,0,15"/>
                     
-                    <Border BorderBrush="LightGray" BorderThickness="1" Margin="0,0,0,10">
+                    <Border BorderBrush="#464646" BorderThickness="1" Margin="0,0,0,10">
                         <Grid>
                             <ProgressBar x:Name="ResultsProgressBar" 
                                         Height="25" 
                                         Minimum="0" 
-                                        Maximum="100"/>
+                                        Maximum="100"
+                                        Background="#2a2a2a"/>
                             <TextBlock x:Name="ProgressTextBlock" 
                                       HorizontalAlignment="Center" 
                                       VerticalAlignment="Center"
                                       FontWeight="Bold"
-                                      Foreground="Black"/>
+                                      Foreground="White"/>
                         </Grid>
                     </Border>
                     
@@ -47,14 +64,18 @@
                               FontSize="16" 
                               FontWeight="Bold"
                               HorizontalAlignment="Center"
-                              Margin="0,10"/>
+                              Margin="0,10"
+                              Foreground="#fa8100"/>
                     
-                    <GroupBox Header="Детальная статистика" Margin="0,15,0,0">
-                        <StackPanel>
-                            <TextBlock x:Name="DetailsTextBlock" 
-                                      FontSize="12" 
-                                      TextWrapping="Wrap"/>
-                        </StackPanel>
+                    <GroupBox Header="📈 Детальная статистика" Foreground="White" Margin="0,15,0,0">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="150">
+                            <StackPanel>
+                                <TextBlock x:Name="DetailsTextBlock" 
+                                          FontSize="12" 
+                                          TextWrapping="Wrap"
+                                          Foreground="White"/>
+                            </StackPanel>
+                        </ScrollViewer>
                     </GroupBox>
                 </StackPanel>
             </ScrollViewer>
@@ -63,33 +84,51 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
             <Button x:Name="SaveResultsButton"
                     Content="💾 Сохранить результаты" 
-                    Width="160" 
-                    Height="35"
-                    Background="#1E90FF" 
+                    Width="180" 
+                    Height="40"
+                    Background="#464646" 
                     Foreground="White"
-                    FontWeight="Bold"
+                    FontSize="14"
+                    FontWeight="SemiBold"
                     Click="SaveResultsButton_Click"
-                    Margin="5"/>
+                    Margin="5"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
             
             <Button x:Name="ViewDetailsButton"
                     Content="🔍 Детальные результаты" 
                     Width="180" 
-                    Height="35"
-                    Background="#FF8C00" 
+                    Height="40"
+                    Background="#464646" 
                     Foreground="White"
-                    FontWeight="Bold"
+                    FontSize="14"
+                    FontWeight="SemiBold"
                     Click="ViewDetailsButton_Click"
-                    Margin="5"/>
+                    Margin="5"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
             
             <Button x:Name="CloseButton"
                     Content="✅ Закрыть" 
-                    Width="120" 
-                    Height="35"
-                    Background="#32CD32" 
+                    Width="140" 
+                    Height="40"
+                    Background="#464646" 
                     Foreground="White"
-                    FontWeight="Bold"
+                    FontSize="14"
+                    FontWeight="SemiBold"
                     Click="CloseButton_Click"
-                    Margin="5"/>
+                    Margin="5"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

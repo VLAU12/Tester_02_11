@@ -5,55 +5,89 @@
         Height="500" 
         Width="600"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Background="Black">
     
     <Grid Margin="20">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#000000" Offset="0"/>
+                <GradientStop Color="#121212" Offset="0.3"/>
+                <GradientStop Color="#1a1a1a" Offset="0.5"/>
+                <GradientStop Color="#121212" Offset="0.7"/>
+                <GradientStop Color="#000000" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        
         <StackPanel>
-            <TextBlock Text="Перед началом теста" 
+            <TextBlock Text="👤 Перед началом теста" 
                       FontSize="20" 
                       FontWeight="Bold"
+                      Foreground="#a3a3a3"
                       HorizontalAlignment="Center"
-                      Margin="0,0,0,20"/>
+                      Margin="0,0,0,25">
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="#fa8100" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+                </TextBlock.Effect>
+            </TextBlock>
             
             <TextBlock Text="Пожалуйста, представьтесь:" 
                       FontSize="14"
+                      Foreground="White"
                       Margin="0,0,0,10"/>
             
             <TextBox x:Name="StudentNameTextBox" 
-                    Height="35" 
+                    Height="40" 
                     FontSize="14"
-                    Margin="0,0,0,15"
+                    Margin="0,0,0,20"
                     Text="Студент"
+                    Background="#2a2a2a"
+                    Foreground="White"
                     ToolTip="Введите ваше имя и фамилию"
                     KeyDown="StudentNameTextBox_KeyDown"/>
             
-            <GroupBox Header="Информация о тесте" Margin="0,0,0,15">
-                <StackPanel>
-                    <TextBlock x:Name="TestInfoTextBlock" 
-                              FontSize="12" 
-                              TextWrapping="Wrap"/>
-                </StackPanel>
+            <GroupBox Header="📋 Информация о тесте" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,20">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="150">
+                    <StackPanel>
+                        <TextBlock x:Name="TestInfoTextBlock" 
+                                  FontSize="12" 
+                                  Foreground="White"
+                                  TextWrapping="Wrap"/>
+                    </StackPanel>
+                </ScrollViewer>
             </GroupBox>
             
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button x:Name="StartTestButton"
                         Content="✅ Начать тест" 
-                        Width="120" 
-                        Height="35"
-                        Background="#32CD32" 
+                        Width="140" 
+                        Height="40"
+                        Background="#464646" 
                         Foreground="White"
-                        FontWeight="Bold"
+                        FontSize="14"
+                        FontWeight="SemiBold"
                         Click="StartTestButton_Click"
-                        Margin="0,0,10,0"/>
+                        Margin="0,0,15,0"
+                        Cursor="Hand">
+                    <Button.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                    </Button.Effect>
+                </Button>
                 
                 <Button x:Name="CancelButton"
                         Content="❌ Отмена" 
-                        Width="120" 
-                        Height="35"
-                        Background="#DC143C" 
+                        Width="140" 
+                        Height="40"
+                        Background="#464646" 
                         Foreground="White"
-                        FontWeight="Bold"
-                        Click="CancelButton_Click"/>
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Click="CancelButton_Click"
+                        Cursor="Hand">
+                    <Button.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                    </Button.Effect>
+                </Button>
             </StackPanel>
         </StackPanel>
     </Grid>

@@ -4,7 +4,8 @@
         Title="Редактор вопроса на сопоставление" 
         Height="700" 
         Width="800"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterOwner"
+        Background="Black">
     
     <Grid Margin="15">
         <Grid.RowDefinitions>
@@ -13,33 +14,54 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" 
-                  Text="Вопрос на сопоставление" 
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#000000" Offset="0"/>
+                <GradientStop Color="#121212" Offset="0.3"/>
+                <GradientStop Color="#1a1a1a" Offset="0.5"/>
+                <GradientStop Color="#121212" Offset="0.7"/>
+                <GradientStop Color="#000000" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        
+        <TextBlock Grid.Row="0"
+                  Foreground="#a3a3a3" 
+                  Text="🔗 Вопрос на сопоставление" 
                   FontSize="18" 
                   FontWeight="Bold"
-                  Margin="0,0,0,10"/>
+                  Margin="0,0,0,10"
+                  HorizontalAlignment="Center">
+            <TextBlock.Effect>
+                <DropShadowEffect Color="#fa8100" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+            </TextBlock.Effect>
+        </TextBlock>
 
-        <GroupBox Grid.Row="1" Header="Текст задания:" Margin="0,0,0,10">
+        <GroupBox Grid.Row="1" Header="Текст задания:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,10">
             <TextBox x:Name="QuestionTextTextBox" 
                     Height="60" 
                     TextWrapping="Wrap" 
                     VerticalScrollBarVisibility="Auto"
                     Text="Соотнесите элементы из левого и правого столбцов..."
-                    FontSize="14"/>
+                    FontSize="14"
+                    Background="#2a2a2a"
+                    Foreground="White"/>
         </GroupBox>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
-            <Label Content="Баллы за вопрос:" VerticalAlignment="Center"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,15">
+            <Label Content="Баллы за вопрос:" Foreground="White" VerticalAlignment="Center"/>
             <TextBox x:Name="PointsTextBox" 
                     Width="50" 
                     Margin="10,0,0,0" 
                     Text="2"
+                    Background="#2a2a2a"
+                    Foreground="White"
                     VerticalAlignment="Center"/>
         </StackPanel>
 
-        <GroupBox Grid.Row="3" Header="Пары для сопоставления:" Margin="0,0,0,10">
+        <GroupBox Grid.Row="3" Header="Пары для сопоставления:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -51,21 +73,21 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <GroupBox Grid.Row="0" Grid.Column="0" Header="Левый столбец (понятия)">
-                    <ListView x:Name="LeftItemsListView" Height="200">
+                <GroupBox Grid.Row="0" Grid.Column="0" Foreground="#fa8100" Header="Левый столбец (понятия)">
+                    <ListView x:Name="LeftItemsListView" Height="200" Background="#2a2a2a" Foreground="White">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Ключ" Width="50">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Key}" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="{Binding Key}" HorizontalAlignment="Center" Foreground="White"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Header="Понятие" Width="200">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox Text="{Binding Value}" Width="190" Margin="2"/>
+                                            <TextBox Text="{Binding Value}" Width="190" Margin="2" Background="#2a2a2a" Foreground="White"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -76,26 +98,27 @@
 
                 <TextBlock Grid.Row="0" Grid.Column="1" 
                           Text="→" 
-                          FontSize="24" 
+                          FontSize="28" 
                           FontWeight="Bold"
                           VerticalAlignment="Center"
-                          Margin="10,0"/>
+                          Margin="15,0"
+                          Foreground="#fa8100"/>
 
-                <GroupBox Grid.Row="0" Grid.Column="2" Header="Правый столбец (определения)">
-                    <ListView x:Name="RightItemsListView" Height="200">
+                <GroupBox Grid.Row="0" Grid.Column="2" Foreground="#fa8100" Header="Правый столбец (определения)">
+                    <ListView x:Name="RightItemsListView" Height="200" Background="#2a2a2a" Foreground="White">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Ключ" Width="50">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Key}" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="{Binding Key}" HorizontalAlignment="Center" Foreground="White"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Header="Определение" Width="200">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox Text="{Binding Value}" Width="190" Margin="2"/>
+                                            <TextBox Text="{Binding Value}" Width="190" Margin="2" Background="#2a2a2a" Foreground="White"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -104,63 +127,130 @@
                     </ListView>
                 </GroupBox>
 
-                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="➕ Добавить" Width="80" Click="AddLeftItemButton_Click"/>
-                    <Button Content="🗑️ Удалить" Width="80" Margin="5,0" Click="RemoveLeftItemButton_Click"/>
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+                    <Button Content="➕ Добавить" 
+                            Width="90" 
+                            Height="30"
+                            Background="#464646"
+                            Foreground="White"
+                            Click="AddLeftItemButton_Click"
+                            Cursor="Hand">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="8" ShadowDepth="2" Color="#fa8100"/>
+                        </Button.Effect>
+                    </Button>
+                    <Button Content="🗑️ Удалить" 
+                            Width="90" 
+                            Height="30"
+                            Margin="5,0" 
+                            Background="#464646"
+                            Foreground="White"
+                            Click="RemoveLeftItemButton_Click"
+                            Cursor="Hand">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="8" ShadowDepth="2" Color="#fa8100"/>
+                        </Button.Effect>
+                    </Button>
                 </StackPanel>
 
-                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="➕ Добавить" Width="80" Click="AddRightItemButton_Click"/>
-                    <Button Content="🗑️ Удалить" Width="80" Margin="5,0" Click="RemoveRightItemButton_Click"/>
+                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+                    <Button Content="➕ Добавить" 
+                            Width="90" 
+                            Height="30"
+                            Background="#464646"
+                            Foreground="White"
+                            Click="AddRightItemButton_Click"
+                            Cursor="Hand">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="8" ShadowDepth="2" Color="#fa8100"/>
+                        </Button.Effect>
+                    </Button>
+                    <Button Content="🗑️ Удалить" 
+                            Width="90" 
+                            Height="30"
+                            Margin="5,0" 
+                            Background="#464646"
+                            Foreground="White"
+                            Click="RemoveRightItemButton_Click"
+                            Cursor="Hand">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="8" ShadowDepth="2" Color="#fa8100"/>
+                        </Button.Effect>
+                    </Button>
                 </StackPanel>
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="4" Header="Управление соответствиями" Margin="0,0,0,15">
+        <GroupBox Grid.Row="4" Header="Управление соответствиями" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,15">
             <StackPanel>
                 <TextBlock x:Name="MatchesInfoTextBlock" 
                           FontSize="12" 
                           TextWrapping="Wrap"
                           Margin="0,0,0,10"
-                          Text="Соответствия не установлены"/>
+                          Text="Соответствия не установлены"
+                          Foreground="White"/>
                 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button x:Name="EditMatchesButton"
                             Content="🔗 Установить соответствия" 
-                            Width="160" 
-                            Height="30"
+                            Width="180" 
+                            Height="35"
+                            Background="#464646"
+                            Foreground="White"
+                            FontWeight="SemiBold"
                             Click="EditMatchesButton_Click"
-                            Margin="5"/>
+                            Margin="5"
+                            Cursor="Hand">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                        </Button.Effect>
+                    </Button>
                     
                     <Button Content="🗑️ Удалить выбранное" 
-                            Width="140" 
-                            Height="30"
-                            Background="Orange" 
+                            Width="150" 
+                            Height="35"
+                            Background="#464646" 
                             Foreground="White"
+                            FontWeight="SemiBold"
                             Click="RemoveSelectedMatchButton_Click"
-                            Margin="5"/>
+                            Margin="5"
+                            Cursor="Hand">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                        </Button.Effect>
+                    </Button>
                     
                     <Button Content="💾 Сохранить вопрос" 
-                            Width="140" 
-                            Height="30"
-                            Background="#32CD32" 
+                            Width="150" 
+                            Height="35"
+                            Background="#464646" 
                             Foreground="White"
+                            FontWeight="SemiBold"
                             Click="SaveButton_Click"
-                            Margin="5"/>
+                            Margin="5"
+                            Cursor="Hand">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                        </Button.Effect>
+                    </Button>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
 
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
-            
-            
             <Button Content="❌ Отмена" 
                     Width="100" 
-                    Height="35"
-                    Background="#DC143C" 
+                    Height="40"
+                    Background="#464646" 
                     Foreground="White"
-                    FontWeight="Bold"
-                    Click="CancelButton_Click"/>
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Click="CancelButton_Click"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

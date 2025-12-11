@@ -4,7 +4,8 @@
         Title="Редактор вопроса с вводом текста" 
         Height="450" 
         Width="600"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterOwner"
+        Background="Black">
     
     <Grid Margin="15">
         <Grid.RowDefinitions>
@@ -15,49 +16,72 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
+        
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#000000" Offset="0"/>
+                <GradientStop Color="#121212" Offset="0.3"/>
+                <GradientStop Color="#1a1a1a" Offset="0.5"/>
+                <GradientStop Color="#121212" Offset="0.7"/>
+                <GradientStop Color="#000000" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        
         <TextBlock Grid.Row="0" 
-                  Text="Вопрос с вводом текста" 
+                  Text="⌨️ Вопрос с вводом текста" 
                   FontSize="18" 
+                  Foreground="#a3a3a3"
                   FontWeight="Bold"
-                  Margin="0,0,0,10"/>
+                  Margin="0,0,0,10"
+                  HorizontalAlignment="Center">
+            <TextBlock.Effect>
+                <DropShadowEffect Color="#fa8100" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+            </TextBlock.Effect>
+        </TextBlock>
 
-        <GroupBox Grid.Row="1" Header="Текст вопроса:" Margin="0,0,0,10">
+        <GroupBox Grid.Row="1" Header="Текст вопроса:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,10">
             <TextBox x:Name="QuestionTextTextBox" 
                     Height="60" 
                     TextWrapping="Wrap" 
                     VerticalScrollBarVisibility="Auto"
                     Text="Введите текст вопроса..."
+                    Foreground="White"
+                    Background="#2a2a2a"
                     FontSize="14"
                     ToolTip="Можно использовать пропуски вида _____ для заполнения"/>
         </GroupBox>
 
-        <GroupBox Grid.Row="2" Header="Правильный ответ:" Margin="0,0,0,10">
+        <GroupBox Grid.Row="2" Header="Правильный ответ:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,10">
             <TextBox x:Name="CorrectAnswerTextBox" 
                     Height="40" 
                     FontSize="14"
                     Text="Введите правильный ответ..."
+                    Background="#2a2a2a"
+                    Foreground="White"
                     ToolTip="Ответ, который должен ввести студент"/>
         </GroupBox>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,10">
-            <Label Content="Баллы за вопрос:" VerticalAlignment="Center"/>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,15">
+            <Label Content="Баллы за вопрос:" Foreground="White" VerticalAlignment="Center"/>
             <TextBox x:Name="PointsTextBox" 
                     Width="50" 
                     Margin="10,0,0,0" 
                     Text="1"
+                    Foreground="White"
+                    Background="#2a2a2a"
                     VerticalAlignment="Center"/>
         </StackPanel>
 
-        <GroupBox Grid.Row="4" Header="Настройки проверки:" Margin="0,0,0,10">
+        <GroupBox Grid.Row="4" Header="Настройки проверки:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,15">
             <StackPanel>
                 <CheckBox x:Name="CaseSensitiveCheckBox" 
                          Content="Учитывать регистр букв"
                          Margin="0,5"
-                         ToolTip="Если отмечено, 'Ответ' и 'ответ' будут считаться разными"/>
+                         ToolTip="Если отмечено, 'Ответ' и 'ответ' будут считаться разными"
+                         Foreground="White"/>
                 <TextBlock Text="Пример: 'Париж' и 'париж' будут считаться разными ответами" 
                           FontStyle="Italic" 
-                          Foreground="Gray"
+                          Foreground="#a3a3a3"
                           Margin="0,5"/>
             </StackPanel>
         </GroupBox>
@@ -65,19 +89,31 @@
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="💾 Сохранить" 
                     Width="100" 
-                    Height="35"
-                    Background="#32CD32" 
+                    Height="40"
+                    Background="#464646" 
                     Foreground="White"
-                    FontWeight="Bold"
+                    FontSize="14"
+                    FontWeight="SemiBold"
                     Click="SaveButton_Click"
-                    Margin="0,0,10,0"/>
+                    Margin="0,0,10,0"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
             <Button Content="❌ Отмена" 
                     Width="100" 
-                    Height="35"
-                    Background="#DC143C" 
+                    Height="40"
+                    Background="#464646" 
                     Foreground="White"
-                    FontWeight="Bold"
-                    Click="CancelButton_Click"/>
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Click="CancelButton_Click"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

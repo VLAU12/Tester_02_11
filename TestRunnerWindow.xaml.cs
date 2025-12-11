@@ -16,6 +16,7 @@ namespace Tester2_01_GUI
         private TestResult testResult = new TestResult();
         private int currentQuestionIndex = 0;
         private Dictionary<int, string> studentAnswers = new Dictionary<int, string>();
+        private Dictionary<int, Button> navigationButtons = new Dictionary<int, Button>();
         
         private DispatcherTimer? questionTimer;
         private DispatcherTimer? testTimer;
@@ -30,6 +31,7 @@ namespace Tester2_01_GUI
             currentTest = test;
             InitializeTimers();
             InitializeTest(studentName);
+            CreateNavigationButtons();
             LoadQuestion(0);
         }
 
@@ -57,17 +59,18 @@ namespace Tester2_01_GUI
             TestTitleTextBlock.Text = currentTest.Title;
             TestAuthorTextBlock.Text = $"Автор: {currentTest.Author}";
             
+            // ИСПРАВЛЯЕМ: TimeLimitType → TestTimeLimitType
             switch (currentTest.TimeLimitType)
             {
-                case TimeLimitType.PerQuestion:
+                case TestTimeLimitType.PerQuestion:
                     TimerTextBlock.Text = $"{currentTest.TimeLimitPerQuestion} сек.";
                     break;
-                case TimeLimitType.WholeTest:
+                case TestTimeLimitType.WholeTest:
                     totalTestTimeSeconds = currentTest.TimeLimitForWholeTest;
                     testStartTime = DateTime.Now;
                     TimerTextBlock.Text = TimeSpan.FromSeconds(totalTestTimeSeconds).ToString(@"mm\:ss");
                     break;
-                case TimeLimitType.None:
+                case TestTimeLimitType.None:
                     TimerTextBlock.Text = "∞";
                     TimerTextBlock.Foreground = Brushes.Gray;
                     break;
@@ -75,10 +78,111 @@ namespace Tester2_01_GUI
             
             PrevQuestionButton.Click += (s, e) => NavigateToQuestion(currentQuestionIndex - 1);
             NextQuestionButton.Click += (s, e) => NavigateToQuestion(currentQuestionIndex + 1);
+            SkipQuestionButton.Click += SkipQuestionButton_Click;
             FinishTestButton.Click += FinishTestButton_Click;
             
             UpdateNavigationButtons();
             UpdateProgress();
+        }
+
+        private void CreateNavigationButtons()
+        {
+            NavigationPanel.Children.Clear();
+            navigationButtons.Clear();
+
+            for (int i = 0; i < currentTest.Questions.Count; i++)
+            {
+                var button = new Button
+                {
+                    Content = (i + 1).ToString(),
+                    Width = 40,
+                    Height = 40,
+                    Margin = new Thickness(2),
+                    FontSize = 14,
+                    FontWeight = FontWeights.Bold,
+                    Tag = i
+                };
+
+                UpdateNavigationButtonStyle(button, i, false);
+
+                button.Click += NavigationButton_Click;
+                NavigationPanel.Children.Add(button);
+                navigationButtons[i] = button;
+            }
+        }
+
+        private void UpdateNavigationButtonStyle(Button button, int questionIndex, bool isCurrent)
+        {
+            var question = currentTest.Questions[questionIndex];
+            bool isAnswered = studentAnswers.ContainsKey(question.Id);
+            
+            button.ClearValue(Button.BackgroundProperty);
+            button.ClearValue(Button.ForegroundProperty);
+            button.ClearValue(Button.BorderBrushProperty);
+            
+            if (isCurrent)
+            {
+                button.Background = Brushes.DodgerBlue;
+                button.Foreground = Brushes.White;
+                button.BorderBrush = Brushes.DarkBlue;
+                button.BorderThickness = new Thickness(2);
+                button.FontWeight = FontWeights.Bold;
+            }
+            else if (isAnswered)
+            {
+                button.Background = Brushes.LightGreen;
+                button.Foreground = Brushes.Black;
+                button.BorderBrush = Brushes.DarkGreen;
+                button.BorderThickness = new Thickness(1);
+                button.FontWeight = FontWeights.Normal;
+            }
+            else
+            {
+                button.Background = Brushes.LightGray;
+                button.Foreground = Brushes.Black;
+                button.BorderBrush = Brushes.Gray;
+                button.BorderThickness = new Thickness(1);
+                button.FontWeight = FontWeights.Normal;
+            }
+            
+            string status = isCurrent ? "Текущий" : (isAnswered ? "Отвечено" : "Не отвечено");
+            button.ToolTip = $"Вопрос {questionIndex + 1}: {status}\nБаллы: {question.Points}";
+        }
+
+        private void NavigationButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is int questionIndex)
+            {
+                SaveCurrentAnswer();
+                LoadQuestion(questionIndex);
+            }
+        }
+
+        private void SkipQuestionButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveCurrentAnswer();
+            
+            if (currentQuestionIndex < currentTest.Questions.Count - 1)
+            {
+                NavigateToQuestion(currentQuestionIndex + 1);
+            }
+            else
+            {
+                for (int i = 0; i < currentTest.Questions.Count; i++)
+                {
+                    var question = currentTest.Questions[i];
+                    if (!studentAnswers.ContainsKey(question.Id) && i != currentQuestionIndex)
+                    {
+                        NavigateToQuestion(i);
+                        return;
+                    }
+                }
+                
+                MessageBox.Show("Все вопросы либо отвечены, либо пропущены. Вы можете завершить тест.",
+                              "Навигация", 
+                              MessageBoxButton.OK, 
+                              MessageBoxImage.Information);
+            }
         }
 
         private void LoadQuestion(int questionIndex)
@@ -97,8 +201,14 @@ namespace Tester2_01_GUI
 
             QuestionContentControl.Content = null;
 
+
+
             switch (question)
             {
+                
+                case QuestionMedia mediaQuestion:
+                    CreateMediaUI(mediaQuestion);
+                    break;
                 case QuestionMultipleChoice mcQuestion:
                     CreateMultipleChoiceUI(mcQuestion);
                     break;
@@ -115,19 +225,230 @@ namespace Tester2_01_GUI
 
             LoadStudentAnswer(question.Id);
 
+    // ИСПРАВЛЯЕМ: TimeLimitType → TestTimeLimitType
             switch (currentTest.TimeLimitType)
             {
-                case TimeLimitType.PerQuestion:
+                case TestTimeLimitType.PerQuestion:
                     StartQuestionTimer(currentTest.TimeLimitPerQuestion);
                     break;
-                case TimeLimitType.WholeTest:
+                case TestTimeLimitType.WholeTest:
                     StartTestTimer();
                     break;
             }
 
             UpdateNavigationButtons();
             UpdateProgress();
+            UpdateAllNavigationButtons();
         }
+
+        private void CreateMediaUI(QuestionMedia question)
+        {
+            var scrollViewer = new ScrollViewer
+            {
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto
+            };
+            
+            var stackPanel = new StackPanel();
+            scrollViewer.Content = stackPanel;
+            
+            if (!string.IsNullOrEmpty(question.QuestionText))
+            {
+                var textBlock = new TextBlock
+                {
+                    Text = question.QuestionText,
+                    FontSize = 14,
+                    TextWrapping = TextWrapping.Wrap,
+                    Margin = new Thickness(5),
+                    FontWeight = FontWeights.Normal
+                };
+                stackPanel.Children.Add(textBlock);
+            }
+            
+            if (!string.IsNullOrEmpty(question.MediaPath) && System.IO.File.Exists(question.MediaPath))
+            {
+                try
+                {
+                    switch (question.MediaType)
+                    {
+                        case MediaType.Image:
+                            var image = new System.Windows.Controls.Image
+                            {
+                                Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(question.MediaPath)),
+                                Stretch = System.Windows.Media.Stretch.Uniform,
+                                MaxWidth = this.ActualWidth * 0.6, // 80% ширины окна
+                                MaxHeight = this.ActualHeight * 0.45, // 60% высоты окна
+                                Margin = new Thickness(5),
+                                HorizontalAlignment = HorizontalAlignment.Center
+                            };
+                            
+                            // Обработчик изменения размера окна
+                            this.SizeChanged += (s, e) =>
+                            {
+                                image.MaxWidth = this.ActualWidth * 0.6;
+                                image.MaxHeight = this.ActualHeight * 0.45;
+                            };
+                            
+                            stackPanel.Children.Add(image);
+                            break;
+                            
+                        case MediaType.Video:
+                            var videoElement = new MediaElement
+                            {
+                                Source = new Uri(question.MediaPath),
+                                Stretch = System.Windows.Media.Stretch.Uniform,
+                                MaxWidth = this.ActualWidth * 0.6, // 80% ширины окна
+                                MaxHeight = this.ActualHeight * 0.45, // 60% высоты окна
+                                Margin = new Thickness(5),
+                                HorizontalAlignment = HorizontalAlignment.Center,
+                                LoadedBehavior = question.AutoPlay ? MediaState.Play : MediaState.Manual
+                            };
+                            
+                            // Обработчик изменения размера окна
+                            this.SizeChanged += (s, e) =>
+                            {
+                                videoElement.MaxWidth = this.ActualWidth * 0.6;
+                                videoElement.MaxHeight = this.ActualHeight * 0.45;
+                            };
+                            
+                            if (question.Loop)
+                                videoElement.MediaEnded += (s, e) => videoElement.Position = TimeSpan.Zero;
+                            
+                            stackPanel.Children.Add(videoElement);
+                            
+                            var videoControls = CreateMediaControls(videoElement, "видео");
+                            stackPanel.Children.Add(videoControls);
+                            break;
+                            
+                        case MediaType.Audio:
+                            var audioElement = new MediaElement
+                            {
+                                Source = new Uri(question.MediaPath),
+                                Margin = new Thickness(5),
+                                HorizontalAlignment = HorizontalAlignment.Center,
+                                LoadedBehavior = question.AutoPlay ? MediaState.Play : MediaState.Manual
+                            };
+                            
+                            if (question.Loop)
+                                audioElement.MediaEnded += (s, e) => audioElement.Position = TimeSpan.Zero;
+                            
+                            stackPanel.Children.Add(audioElement);
+                            
+                            var audioControls = CreateMediaControls(audioElement, "аудио");
+                            stackPanel.Children.Add(audioControls);
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var errorText = new TextBlock
+                    {
+                        Text = $"Ошибка загрузки медиа: {ex.Message}",
+                        Foreground = Brushes.Red,
+                        Margin = new Thickness(5),
+                        TextWrapping = TextWrapping.Wrap
+                    };
+                    stackPanel.Children.Add(errorText);
+                }
+            }
+            else if (!string.IsNullOrEmpty(question.MediaPath))
+            {
+                var missingText = new TextBlock
+                {
+                    Text = $"Медиафайл не найден: {question.MediaPath}",
+                    Foreground = Brushes.Orange,
+                    Margin = new Thickness(5),
+                    TextWrapping = TextWrapping.Wrap
+                };
+                stackPanel.Children.Add(missingText);
+            }
+            
+            if (!string.IsNullOrEmpty(question.Caption))
+            {
+                var captionText = new TextBlock
+                {
+                    Text = question.Caption,
+                    FontStyle = FontStyles.Italic,
+                    Foreground = Brushes.Gray,
+                    Margin = new Thickness(5, 10, 5, 5),
+                    TextWrapping = TextWrapping.Wrap,
+                    HorizontalAlignment = HorizontalAlignment.Center
+                };
+                stackPanel.Children.Add(captionText);
+            }
+            
+            QuestionContentControl.Content = scrollViewer;
+        }
+
+        private StackPanel CreateMediaControls(MediaElement mediaElement, string mediaType)
+        {
+            var controlsPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(5)
+            };
+            
+            var playButton = new Button
+            {
+                Content = "▶️ Воспроизвести",
+                Width = 120,
+                Height = 30,
+                Margin = new Thickness(2),
+                FontSize = 12
+            };
+            playButton.Click += (s, e) => mediaElement.Play();
+            
+            var pauseButton = new Button
+            {
+                Content = "⏸️ Пауза",
+                Width = 80,
+                Height = 30,
+                Margin = new Thickness(2),
+                FontSize = 12
+            };
+            pauseButton.Click += (s, e) => mediaElement.Pause();
+            
+            var stopButton = new Button
+            {
+                Content = "⏹️ Стоп",
+                Width = 80,
+                Height = 30,
+                Margin = new Thickness(2),
+                FontSize = 12
+            };
+            stopButton.Click += (s, e) => mediaElement.Stop();
+            
+            var volumeSlider = new Slider
+            {
+                Width = 100,
+                Minimum = 0,
+                Maximum = 1,
+                Value = 0.5,
+                Margin = new Thickness(10, 0, 0, 0),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            volumeSlider.ValueChanged += (s, e) => mediaElement.Volume = volumeSlider.Value;
+            
+            controlsPanel.Children.Add(playButton);
+            controlsPanel.Children.Add(pauseButton);
+            controlsPanel.Children.Add(stopButton);
+            controlsPanel.Children.Add(new Label { Content = "Громкость:", Margin = new Thickness(10, 0, 5, 0), VerticalAlignment = VerticalAlignment.Center });
+            controlsPanel.Children.Add(volumeSlider);
+            
+            return controlsPanel;
+        }
+        private void UpdateAllNavigationButtons()
+        {
+            for (int i = 0; i < currentTest.Questions.Count; i++)
+            {
+                if (navigationButtons.ContainsKey(i))
+                {
+                    UpdateNavigationButtonStyle(navigationButtons[i], i, i == currentQuestionIndex);
+                }
+            }
+        }
+
         private void CreateMultipleChoiceMultiUI(QuestionMultipleChoiceMulti question)
         {
             var stackPanel = new StackPanel();
@@ -139,7 +460,8 @@ namespace Tester2_01_GUI
                     Content = question.Options[i],
                     FontSize = 14,
                     Margin = new Thickness(5),
-                    Tag = i // Сохраняем индекс варианта
+                    Tag = i,
+                    Foreground = Brushes.White
                 };
 
                 stackPanel.Children.Add(checkBox);
@@ -207,7 +529,7 @@ namespace Tester2_01_GUI
         {
             string timerText;
             
-            if (currentTest.TimeLimitType == TimeLimitType.WholeTest)
+            if (currentTest.TimeLimitType == TestTimeLimitType.WholeTest)
             {
                 timerText = TimeSpan.FromSeconds(timeRemaining).ToString(@"mm\:ss");
             }
@@ -218,7 +540,7 @@ namespace Tester2_01_GUI
             
             TimerTextBlock.Text = timerText;
             
-            if (currentTest.TimeLimitType == TimeLimitType.WholeTest)
+            if (currentTest.TimeLimitType == TestTimeLimitType.WholeTest)
             {
                 double percentage = (double)timeRemaining / totalTestTimeSeconds;
                 if (percentage <= 0.1)
@@ -299,7 +621,8 @@ namespace Tester2_01_GUI
                     Content = question.Options[i],
                     FontSize = 14,
                     Margin = new Thickness(5),
-                    Tag = i
+                    Tag = i,
+                    Foreground = Brushes.White
                 };
 
                 stackPanel.Children.Add(radioButton);
@@ -445,6 +768,7 @@ namespace Tester2_01_GUI
                         }
                     }
                     break;
+                
                 case QuestionMultipleChoiceMulti:
                     var checkBoxStack = QuestionContentControl.Content as StackPanel;
                     if (checkBoxStack != null)
@@ -453,8 +777,8 @@ namespace Tester2_01_GUI
                             .OfType<CheckBox>()
                             .Where(cb => cb.IsChecked == true)
                             .Select(cb => cb.Tag?.ToString())
-                            .Where(tag => tag != null)
-                            .Select(tag => int.Parse(tag))
+                            .Where(tag => !string.IsNullOrEmpty(tag))
+                            .Select(tag => int.Parse(tag!)) // Здесь добавляем !
                             .ToList();
                         
                         answer = string.Join(",", selectedIndices);
@@ -464,6 +788,8 @@ namespace Tester2_01_GUI
 
             if (!string.IsNullOrEmpty(answer))
                 studentAnswers[question.Id] = answer;
+            
+            UpdateAllNavigationButtons();
         }
 
         private void LoadStudentAnswer(int questionId)
@@ -496,6 +822,59 @@ namespace Tester2_01_GUI
                         break;
 
                     case QuestionMatching mQuestion:
+                        var matchingGrid = QuestionContentControl.Content as Grid;
+                        if (matchingGrid != null && !string.IsNullOrEmpty(savedAnswer))
+                        {
+                            var rightStack = matchingGrid.Children
+                                .OfType<StackPanel>()
+                                .FirstOrDefault(s => Grid.GetColumn(s) == 2);
+                            
+                            if (rightStack != null)
+                            {
+                                var pairs = savedAnswer.Split(';');
+                                foreach (var pair in pairs)
+                                {
+                                    var parts = pair.Split(':');
+                                    if (parts.Length == 2)
+                                    {
+                                        string leftKey = parts[0];
+                                        string rightKey = parts[1];
+                                        
+                                        foreach (var comboBox in rightStack.Children.OfType<ComboBox>())
+                                        {
+                                            if (comboBox.Tag?.ToString() == leftKey)
+                                            {
+                                                var itemToSelect = comboBox.Items
+                                                    .Cast<string>()
+                                                    .FirstOrDefault(item => item.StartsWith(rightKey + "."));
+                                                if (itemToSelect != null)
+                                                {
+                                                    comboBox.SelectedItem = itemToSelect;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case QuestionMultipleChoiceMulti:
+                        var checkBoxStack = QuestionContentControl.Content as StackPanel;
+                        if (checkBoxStack != null && !string.IsNullOrEmpty(savedAnswer))
+                        {
+                            var selectedIndices = savedAnswer.Split(',')
+                                .Where(s => !string.IsNullOrEmpty(s))
+                                .Select(s => int.Parse(s))
+                                .ToList();
+                            
+                            foreach (var checkBox in checkBoxStack.Children.OfType<CheckBox>())
+                            {
+                                if (checkBox.Tag is int index && selectedIndices.Contains(index))
+                                {
+                                    checkBox.IsChecked = true;
+                                }
+                            }
+                        }
                         break;
                 }
             }
@@ -511,6 +890,7 @@ namespace Tester2_01_GUI
         {
             PrevQuestionButton.IsEnabled = currentQuestionIndex > 0;
             NextQuestionButton.IsEnabled = currentQuestionIndex < currentTest.Questions.Count - 1;
+            SkipQuestionButton.IsEnabled = currentTest.Questions.Count > 1;
             FinishTestButton.IsEnabled = true;
         }
 
@@ -552,6 +932,13 @@ namespace Tester2_01_GUI
                     
                     switch (question)
                     {
+                        case QuestionMedia mediaQuestion:
+                            if (mediaQuestion.Points > 0)
+                            {
+                                totalScore += mediaQuestion.Points;
+                            }
+                            break;
+                        
                         case QuestionMultipleChoice mcQuestion:
                             if (int.TryParse(studentAnswer, out int selectedIndex) && 
                                 selectedIndex == mcQuestion.CorrectOptionIndex)
@@ -568,7 +955,6 @@ namespace Tester2_01_GUI
                             break;
 
                         case QuestionMatching mQuestion:
-                            // Проверка сопоставлений
                             if (IsMatchingAnswerCorrect(studentAnswer, mQuestion))
                             {
                                 totalScore += mQuestion.Points;
@@ -611,11 +997,11 @@ namespace Tester2_01_GUI
             StopTimers();
             base.OnClosed(e);
         }
+        
         private bool IsMatchingAnswerCorrect(string studentAnswer, QuestionMatching question)
         {
             try
             {
-                // Формат ответа студента: "1:A;2:B;3:B;4:A"
                 var studentMatches = new Dictionary<string, List<string>>();
                 
                 if (string.IsNullOrEmpty(studentAnswer))
@@ -642,10 +1028,8 @@ namespace Tester2_01_GUI
                     }
                 }
                 
-                // Получаем правильные соответствия
                 var correctMatches = question.GetCorrectMatchesList();
                 
-                // Проверяем, совпадают ли все соответствия
                 if (studentMatches.Count != correctMatches.Count)
                     return false;
                     
@@ -657,7 +1041,6 @@ namespace Tester2_01_GUI
                     var studentValues = studentMatches[correctMatch.Key];
                     var correctValues = correctMatch.Value;
                     
-                    // Проверяем, что все правильные значения есть в ответе студента
                     if (studentValues.Count != correctValues.Count)
                         return false;
                         

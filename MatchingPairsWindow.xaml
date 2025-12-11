@@ -4,22 +4,40 @@
         Title="Редактор правильных соответствий" 
         Height="600" 
         Width="820"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterOwner"
+        Background="Black">
     
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#000000" Offset="0"/>
+                <GradientStop Color="#121212" Offset="0.3"/>
+                <GradientStop Color="#1a1a1a" Offset="0.5"/>
+                <GradientStop Color="#121212" Offset="0.7"/>
+                <GradientStop Color="#000000" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <TextBlock Grid.Row="0" 
-                  Text="Установите правильные соответствия" 
+                  Text="🔗 Установите правильные соответствия" 
                   FontSize="18" 
                   FontWeight="Bold"
-                  Margin="0,0,0,10"/>
+                  Foreground="#a3a3a3"
+                  Margin="0,0,0,10"
+                  HorizontalAlignment="Center">
+            <TextBlock.Effect>
+                <DropShadowEffect Color="#fa8100" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+            </TextBlock.Effect>
+        </TextBlock>
 
-        <GroupBox Grid.Row="1" Header="Сопоставление элементов" Margin="0,0,0,10">
+        <GroupBox Grid.Row="1" Header="Сопоставление элементов" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -28,8 +46,8 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Margin="5">
-                    <TextBlock Text="Левый столбец (понятия):" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <ListView x:Name="LeftItemsListView" Height="300">
+                    <TextBlock Text="Левый столбец (понятия):" Foreground="#fa8100" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ListView x:Name="LeftItemsListView" Height="300" Background="#2a2a2a" Foreground="White">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Ключ" Width="50" DisplayMemberBinding="{Binding Key}"/>
@@ -41,14 +59,15 @@
 
                 <TextBlock Grid.Column="1" 
                           Text="→" 
-                          FontSize="24" 
+                          FontSize="28" 
                           FontWeight="Bold"
                           VerticalAlignment="Center"
-                          Margin="10,0"/>
+                          Margin="15,0"
+                          Foreground="#fa8100"/>
 
                 <StackPanel Grid.Column="2" Margin="5">
-                    <TextBlock Text="Правый столбец (определения):" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <ListView x:Name="RightItemsListView" Height="300">
+                    <TextBlock Text="Правый столбец (определения):" Foreground="#fa8100" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ListView x:Name="RightItemsListView" Height="300" Background="#2a2a2a" Foreground="White">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Ключ" Width="50" DisplayMemberBinding="{Binding Key}"/>
@@ -60,32 +79,55 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="2" Header="Установленные соответствия" Margin="0,0,0,10">
+        <GroupBox Grid.Row="2" Header="Установленные соответствия" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,10">
             <StackPanel>
                 <TextBlock x:Name="CurrentMatchesTextBlock" 
                           FontSize="12" 
                           TextWrapping="Wrap"
-                          Margin="5"/>
+                          Margin="5"
+                          Foreground="White"/>
                 
-                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,5" HorizontalAlignment="Center">
                     <Button Content="➕ Добавить соответствие" 
-                            Width="150" 
-                            Height="30"
-                            Click="AddMatchButton_Click"/>
+                            Width="160" 
+                            Height="35"
+                            Background="#464646"
+                            Foreground="White"
+                            FontWeight="SemiBold"
+                            Click="AddMatchButton_Click"
+                            Cursor="Hand">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                        </Button.Effect>
+                    </Button>
                     
                     <Button Content="🗑️ Удалить выбранное" 
-                            Width="120" 
-                            Height="30"
+                            Width="140" 
+                            Height="35"
                             Margin="10,0,0,0"
-                            Background="Orange"
+                            Background="#464646"
                             Foreground="White"
-                            Click="RemoveSelectedMatchButton_Click"/>
+                            FontWeight="SemiBold"
+                            Click="RemoveSelectedMatchButton_Click"
+                            Cursor="Hand">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                        </Button.Effect>
+                    </Button>
                     
                     <Button Content="🗑️ Очистить все" 
-                            Width="100" 
-                            Height="30"
+                            Width="120" 
+                            Height="35"
                             Margin="10,0,0,0"
-                            Click="ClearMatchesButton_Click"/>
+                            Background="#464646"
+                            Foreground="White"
+                            FontWeight="SemiBold"
+                            Click="ClearMatchesButton_Click"
+                            Cursor="Hand">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                        </Button.Effect>
+                    </Button>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
@@ -94,21 +136,33 @@
             <Button x:Name="SaveButton"
                     Content="💾 Сохранить" 
                     Width="100" 
-                    Height="35"
-                    Background="#32CD32" 
+                    Height="40"
+                    Background="#464646" 
                     Foreground="White"
-                    FontWeight="Bold"
+                    FontSize="14"
+                    FontWeight="SemiBold"
                     Click="SaveButton_Click"
-                    Margin="0,0,10,0"/>
+                    Margin="0,0,10,0"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
             
             <Button x:Name="CancelButton"
                     Content="❌ Отмена" 
                     Width="100" 
-                    Height="35"
-                    Background="#DC143C" 
+                    Height="40"
+                    Background="#464646" 
                     Foreground="White"
-                    FontWeight="Bold"
-                    Click="CancelButton_Click"/>
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Click="CancelButton_Click"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

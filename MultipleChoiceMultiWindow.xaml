@@ -4,7 +4,8 @@
         Title="Редактор вопроса с множественным выбором" 
         Height="500" 
         Width="650"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterOwner"
+        Background="Black">
     
     <Grid Margin="15">
         <Grid.RowDefinitions>
@@ -15,31 +16,51 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#000000" Offset="0"/>
+                <GradientStop Color="#121212" Offset="0.3"/>
+                <GradientStop Color="#1a1a1a" Offset="0.5"/>
+                <GradientStop Color="#121212" Offset="0.7"/>
+                <GradientStop Color="#000000" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <TextBlock Grid.Row="0" 
-                  Text="Вопрос с множественным выбором" 
+                  Text="☑️ Вопрос с множественным выбором" 
                   FontSize="18" 
                   FontWeight="Bold"
-                  Margin="0,0,0,10"/>
+                  Foreground="#a3a3a3"
+                  Margin="0,0,0,10"
+                  HorizontalAlignment="Center">
+            <TextBlock.Effect>
+                <DropShadowEffect Color="#fa8100" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+            </TextBlock.Effect>
+        </TextBlock>
 
-        <GroupBox Grid.Row="1" Header="Текст вопроса:" Margin="0,0,0,10">
+        <GroupBox Grid.Row="1" Header="Текст вопроса:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,10">
             <TextBox x:Name="QuestionTextTextBox" 
                     Height="60" 
                     TextWrapping="Wrap" 
                     VerticalScrollBarVisibility="Auto"
                     Text="Выберите правильные варианты..."
-                    FontSize="14"/>
+                    FontSize="14"
+                    Background="#2a2a2a"
+                    Foreground="White"/>
         </GroupBox>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
-            <Label Content="Баллы за вопрос:" VerticalAlignment="Center"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,15">
+            <Label Content="Баллы за вопрос:" Foreground="White" VerticalAlignment="Center"/>
             <TextBox x:Name="PointsTextBox" 
                     Width="50" 
                     Margin="10,0,0,0" 
                     Text="2"
+                    Background="#2a2a2a"
+                    Foreground="White"
                     VerticalAlignment="Center"/>
         </StackPanel>
 
-        <GroupBox Grid.Row="3" Header="Варианты ответов (отметьте правильные):" Margin="0,0,0,10">
+        <GroupBox Grid.Row="3" Header="Варианты ответов (отметьте правильные):" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -49,6 +70,8 @@
                 <ListView x:Name="OptionsListView" 
                          Grid.Row="0" 
                          Height="150" 
+                         Background="#2a2a2a"
+                         Foreground="White"
                          Margin="0,0,0,10">
                     <ListView.View>
                         <GridView>
@@ -56,7 +79,8 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding IsCorrect}"
-                                                  HorizontalAlignment="Center"/>
+                                                  HorizontalAlignment="Center"
+                                                  Foreground="White"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -64,8 +88,10 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Text}" 
-                                                Width="440" 
-                                                Margin="2"/>
+                                                Width="440"
+                                                Margin="2"
+                                                Background="#2a2a2a"
+                                                Foreground="White"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -73,16 +99,32 @@
                     </ListView.View>
                 </ListView>
 
-                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Content="➕ Добавить вариант" 
-                            Width="140" 
-                            Height="30"
-                            Click="AddOptionButton_Click"/>
+                            Width="150" 
+                            Height="35"
+                            Background="#464646"
+                            Foreground="White"
+                            FontWeight="SemiBold"
+                            Click="AddOptionButton_Click"
+                            Cursor="Hand">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                        </Button.Effect>
+                    </Button>
                     <Button Content="🗑️ Удалить выбранный" 
-                            Width="140" 
-                            Height="30"
+                            Width="150" 
+                            Height="35"
                             Margin="10,0,0,0"
-                            Click="RemoveOptionButton_Click"/>
+                            Background="#464646"
+                            Foreground="White"
+                            FontWeight="SemiBold"
+                            Click="RemoveOptionButton_Click"
+                            Cursor="Hand">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                        </Button.Effect>
+                    </Button>
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -90,19 +132,31 @@
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="💾 Сохранить" 
                     Width="100" 
-                    Height="35"
-                    Background="#32CD32" 
+                    Height="40"
+                    Background="#464646" 
                     Foreground="White"
-                    FontWeight="Bold"
+                    FontSize="14"
+                    FontWeight="SemiBold"
                     Click="SaveButton_Click"
-                    Margin="0,0,10,0"/>
+                    Margin="0,0,10,0"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
             <Button Content="❌ Отмена" 
                     Width="100" 
-                    Height="35"
-                    Background="#DC143C" 
+                    Height="40"
+                    Background="#464646" 
                     Foreground="White"
-                    FontWeight="Bold"
-                    Click="CancelButton_Click"/>
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Click="CancelButton_Click"
+                    Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#fa8100"/>
+                </Button.Effect>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

@@ -21,15 +21,16 @@ namespace Tester2_01_GUI
         {
             string timeInfo = test.TimeLimitType switch
             {
-                TimeLimitType.PerQuestion => $"\nВремя на вопрос: {test.TimeLimitPerQuestion} сек.",
-                TimeLimitType.WholeTest => $"\nВремя на тест: {TimeSpan.FromSeconds(test.TimeLimitForWholeTest):mm\\:ss}",
+                // ИСПРАВЛЯЕМ: TimeLimitType → TestTimeLimitType
+                TestTimeLimitType.PerQuestion => $"\nВремя на вопрос: {test.TimeLimitPerQuestion} сек.",
+                TestTimeLimitType.WholeTest => $"\nВремя на тест: {TimeSpan.FromSeconds(test.TimeLimitForWholeTest):mm\\:ss}",
                 _ => "\nОграничение времени: нет"
             };
             
             TestInfoTextBlock.Text = $@"Тест: {test.Title}
-Автор: {test.Author}
-Всего вопросов: {test.Questions.Count}
-Максимальный балл: {test.MaxScore}{timeInfo}";
+        Автор: {test.Author}
+        Всего вопросов: {test.Questions.Count}
+        Максимальный балл: {test.MaxScore}{timeInfo}";
         }
 
         private void StartTestButton_Click(object sender, RoutedEventArgs e)
